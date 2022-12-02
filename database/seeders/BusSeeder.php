@@ -16,15 +16,12 @@ class BusSeeder extends Seeder
     {
         Bus::create([
             "id"=>1,
-            "name"=>"Bus Cairo-Asyut 1"
+            "name"=>"Bus Cairo-Asyut"
         ]);
         Bus::create([
             "id"=>2,
-            "name"=>"Bus  Cairo-Asyut 2"
+            "name"=>"Bus  Alminia-Asyut"
         ]);
-        Bus::create([
-            "id"=>3,
-            "name"=>"Bus  Cairo-Fayyoum 1"
-        ]);
+       
     }
 }
