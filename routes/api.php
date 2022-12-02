@@ -21,10 +21,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['namespace' => 'Api\Mobile', 'prefix' => 'mobile'], function () {
-   Route::post('login', [UsersController::class,'login']);
+   Route::post('login', [UsersController::class,'login'])->name("login");
    Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('search_trip', [BookingTripController::class,'searchTrip']);
-    Route::post('booking_trip', [BookingTripController::class,'bookingTrip']);
+    Route::get('search_trip', [BookingTripController::class,'searchTrip'])->name("search_trip");
+    Route::post('booking_trip', [BookingTripController::class,'bookingTrip'])->name("booking_trip");
    });
 });
 
