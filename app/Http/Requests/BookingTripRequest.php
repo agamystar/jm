@@ -24,9 +24,9 @@ class BookingTripRequest extends FormRequest
     public function rules()
     {
         return [
-           "unique_seat_id"=>"required|number",
-           "from_stop"=>"required|number",
-           "to_stop"=>"required|number",
+           "unique_seat_id"=>"required|integer",
+           "from_stop"=>"required|integer",
+           "to_stop"=>"required|integer",
         ];
     }
 }

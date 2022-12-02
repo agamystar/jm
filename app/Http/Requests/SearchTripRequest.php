@@ -24,8 +24,8 @@ class SearchTripRequest extends FormRequest
     public function rules()
     {
         return [
-           "from_stop"=>"required|number",
-           "to_stop"=>"required|number",
+           "from_stop"=>"required|integer",
+           "to_stop"=>"required|integer",
         ];
     }
 }
