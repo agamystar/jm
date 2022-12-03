@@ -1,4 +1,6 @@
-
+<html>
+<body>
+<pre>
 How to run the the application using the docker
 1- composer install 
 2- change .env.example to to .env and make sure the DB_HOST=db because it is the name of db container serve
@@ -16,3 +18,6 @@ The directory also contain sql dump file and postman collection
 User to test login
 admin@admin.com
 password
+</pre>
+</body>
+</html>
