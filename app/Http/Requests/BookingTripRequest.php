@@ -23,17 +23,23 @@ class BookingTripRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules= [
            "unique_seat_id"=>"required|integer",
            "from_stop"=>"required|integer|exists:stops,id",
            "to_stop"=>"required|integer|exists:stops,id",
         ];
+
+        if(request()->get("from_stop") >= request()->get("to_stop")){
+            $rules['ordering_stations']="required";
+        }
+        return $rules;
     }
     public function messages()
     {
         return [
             "from_stop.required"=>"Start Station is required", 
             "to_stop.required"=>"End Station is required", 
+            "ordering_stations.required"=>"Start Station must be before The Target Station", 
         ];
     }
 
