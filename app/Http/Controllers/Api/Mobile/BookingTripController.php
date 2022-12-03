@@ -15,11 +15,14 @@ use Illuminate\Database\Eloquent\Collection;
  
 class BookingTripController extends Controller
 {
+    /**
+     * param : start and end station 
+     * return the available seats depending on two function  
+     * getAvailableTrips() : return buses that match the same stops
+     * getAvailableSeats() : return available seats inside these buses
+     */
     public function searchTrip(SearchTripRequest $request):JsonResponse
     {
-        //take first and last stop
-        //retrieve the available seats and which bus
-        //$validated = $request->validated();
         $buses = $this->getAvailableTrips($request->from_stop, $request->to_stop);
         if (count($buses)>0) {
              $seats = $this->getAvailableSeats($buses, $request->from_stop, $request->to_stop);
@@ -37,6 +40,9 @@ class BookingTripController extends Controller
         ],501);  
 
     }
+    /** check the buses that go through the selected stations , 
+     * and each bus must at least has 2 stops (start,end) in the table of bus_stops
+     */
     protected function getAvailableTrips($from_stop, $to_stop):array
     {
         return $matched_buses = BusStops::select("bus_id")->where("stop_id", $from_stop)
@@ -44,10 +50,17 @@ class BookingTripController extends Controller
             ->pluck("bus_id")->toArray();
 
     }
+    /**
+     * you can pass arg for one bus or more to check seats inside them 
+     * if unique_seat_id = null so that main i will get all avaible seats
+     * if unique_seat_id has value that mean i don't need to reaturn all availble seats i just need to retun
+     * this one if it is availble by checking in booking table 
+     * some developers  use another way in development like that Bus::with('seats.bookings')
+     */
     protected function getAvailableSeats($buses, $from_stop, $to_stop , $unique_seat_id=null):Collection
     { 
 
-        return Bus::leftJoin("bus_seats","bus_seats.bus_id","=","buses.id")
+        $data = Bus::leftJoin("bus_seats","bus_seats.bus_id","=","buses.id")
             ->leftJoin("bookings", "bookings.seat_id", "=", "bus_seats.id")
             ->select(
                 "bus_seats.bus_id", 
@@ -65,7 +78,15 @@ class BookingTripController extends Controller
                 $q->orWhere("bookings.to_stop_id", '<=', $from_stop);
                 $q->orWhereNull("bookings.to_stop_id");
             })->get();
+
+            return $data;
     } 
+    /**
+     * input: selected seat_id , start , stop stations
+     * return success if this seat still available or failed if not by using this function getAvailableSeats()
+     * this method used also at searchTrip() function but in this case i will pass the selected seat_id to check
+     * if this seat particulary available or not
+     */
     public function bookingTrip(BookingTripRequest $request):JsonResponse
     {
         $bus=BusSeats::find($request->unique_seat_id)->bus_id;

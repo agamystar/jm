@@ -34,19 +34,11 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 # Copy permission to selected user
 COPY --chown=www:www . .
 
-# RUN composer install --optimize-autoloader --no-dev; \
-#     php artisan key:generate --force; \
-#     php artisan migrate; \
-#     php artisan db:seed; \
-#     php artisan cache:clear; \
-#     php artisan config:cache; \
-#     php artisan route:cache; \
-#     php artisan storage:link; \
-#     chown -R www:www /var/www;
-
 # Change current user to www
 USER www
 
+
 EXPOSE 9000
+
 
 CMD ["php-fpm"]
